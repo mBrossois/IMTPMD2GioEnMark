@@ -8,4 +8,5 @@
     <string name="title_activity_invoer_scherm">invoerScherm</string>
     <string name="title_activity_details_scherm">Details scherm</string>
     <string name="title_activity_overzicht_scherm">Overzicht scherm</string>
+    <string name="title_activity_persoonsscherm">Persoonsscherm</string>
 </resources>
