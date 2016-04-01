@@ -9,4 +9,25 @@
     <string name="title_activity_details_scherm">Details scherm</string>
     <string name="title_activity_overzicht_scherm">Overzicht scherm</string>
     <string name="title_activity_persoonsscherm">Persoonsscherm</string>
+    
+    <string-array name="jaargang">
+        <item> Jaargang</item>
+        <item> Jaargang 1</item>
+        <item> Jaargang 2</item>
+    </string-array>
+
+    <string-array name="studierichting">
+        <item> Studierichting</item>
+        <item> Media</item>
+        <item> Software</item>
+        <item> Business</item>
+        <item> Forensisch</item>
+    </string-array>
+
+    <string-array name="periode">
+        <item> Periode 1</item>
+        <item> Periode 2</item>
+        <item> Periode 3</item>
+        <item> Periode 4</item>
+    </string-array>
 </resources>
