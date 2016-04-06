@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
@@ -26,10 +27,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 public class Persoonsscherm extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
 
     @Override
@@ -62,10 +60,29 @@ public class Persoonsscherm extends AppCompatActivity
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
         SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
+
         String name = preferences2.getString("Name", "");
+
+
+        int jaargang = preferences2.getInt("Jaargang", 0);
+
+        int periode = preferences2.getInt("Periode", 0);
+
+        int studierichting = preferences2.getInt("Studierichting", 0);
 
         EditText textViewToChange = (EditText) findViewById(R.id.editText);
         textViewToChange.setText(name);
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setSelection(jaargang);
+
+        Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+        spinner2.setSelection(periode);
+
+        Spinner spinner3 = (Spinner) findViewById(R.id.spinner3);
+        spinner3.setSelection(studierichting);
+
+
     }
 
     @Override
@@ -176,14 +193,45 @@ public class Persoonsscherm extends AppCompatActivity
         EditText edittext = (EditText) findViewById(R.id.editText);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
+
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+        Spinner spinner3 = (Spinner) findViewById(R.id.spinner3);
+
         editor.putString("Name",edittext.getText().toString());
         editor.apply();
+
+        editor.putInt("Jaargang",spinner.getSelectedItemPosition());
+        editor.apply();
+
+
+
+        editor.putInt("Periode",spinner2.getSelectedItemPosition());
+        editor.apply();
+
+        editor.putInt("Studierichting",spinner3.getSelectedItemPosition());
+        editor.apply();
+
+        editor.putString("Jaargangtext",spinner.getSelectedItem().toString());
+        editor.apply();
+
+        editor.putString("Periodetext",spinner3.getSelectedItem().toString());
+        editor.apply();
+
+        editor.putString("Studierichtingtext",spinner2.getSelectedItem().toString());
+        editor.apply();
+
 
         SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences2.getString("Name", "");
 
         EditText textViewToChange = (EditText) findViewById(R.id.editText);
         textViewToChange.setText(name);
+
+        Snackbar.make(this.findViewById(android.R.id.content), "Gegevens zijn opgeslagen", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }
 

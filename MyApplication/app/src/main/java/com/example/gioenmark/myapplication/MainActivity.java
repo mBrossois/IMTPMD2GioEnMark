@@ -29,9 +29,21 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences2.getString("Name", "");
+        String jaargang = preferences2.getString("Jaargangtext", "");
+        String periode = preferences2.getString("Periodetext", "");
+        String studierichting = preferences2.getString("Studierichtingtext", "");
 
         TextView textViewToChange = (TextView) findViewById(R.id.textView2);
-        textViewToChange.setText(name);
+        textViewToChange.setText("Welcome " + name);
+
+        TextView textViewToChange2 = (TextView) findViewById(R.id.textView3);
+        textViewToChange2.setText(jaargang);
+
+        TextView textViewToChange3 = (TextView) findViewById(R.id.textView4);
+        textViewToChange3.setText(periode);
+
+        TextView textViewToChange4 = (TextView) findViewById(R.id.textView5);
+        textViewToChange4.setText(studierichting);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
