@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -12,21 +13,44 @@
     tools:context="com.example.gioenmark.myapplication.InvoerScherm"
     tools:showIn="@layout/app_bar_invoer_scherm">
 
-    <TextView
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="hello"
-        android:background="#85a4b5" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" android:id="@+id/content_frame_invoer">
+        android:text="Eerste periode"
+        android:id="@+id/button"
+        android:layout_marginTop="56dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="grabJsonFirstPeriod"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="grabJSon"
-            android:id="@+id/buttonJson"
-            android:layout_gravity="center"
-            android:onClick="grabJson"/>
-    </FrameLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tweede periode"
+        android:id="@+id/button2"
+        android:layout_below="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:layout_marginTop="49dp"
+        android:onClick="grabJsonSecondPeriod"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Derde periode"
+        android:id="@+id/button3"
+        android:layout_below="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+        android:layout_marginTop="64dp"
+        android:onClick="grabJsonThirthPeriod"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vierde periode"
+        android:id="@+id/button4"
+        android:layout_below="@+id/button3"
+        android:layout_alignStart="@+id/button3"
+        android:layout_marginTop="54dp"
+        android:onClick="grabJsonFourthPeriod"/>
 </RelativeLayout>
