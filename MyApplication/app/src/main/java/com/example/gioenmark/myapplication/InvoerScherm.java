@@ -245,11 +245,13 @@ public class InvoerScherm extends AppCompatActivity
         Button b3 = (Button) findViewById(R.id.button3);
         Button b4 = (Button) findViewById(R.id.button4);
         Button b5 = (Button) findViewById(R.id.button5);
+        TextView v1 = (TextView) findViewById(R.id.Textkeuze);
         b1.setVisibility(View.GONE);
         b2.setVisibility(View.GONE);
         b3.setVisibility(View.GONE);
         b4.setVisibility(View.GONE);
         b5.setVisibility(View.VISIBLE);
+        v1.setVisibility(View.GONE);
         for (int i = 0; i < (lengte + 1); i++) {
             if (i == 0) {
                 for (int j = 0; j < 4; j++) {
