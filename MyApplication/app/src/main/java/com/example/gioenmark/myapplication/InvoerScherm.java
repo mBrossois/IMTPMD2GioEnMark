@@ -252,6 +252,7 @@ public class InvoerScherm extends AppCompatActivity
                 }
             } else {
                 groeyX = 150;
+                if(Integer.parseInt(subjects.get(i -1).period) != periode)
                 {
 
                 }
