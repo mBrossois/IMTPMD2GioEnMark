@@ -53,4 +53,14 @@
         android:layout_alignStart="@+id/button3"
         android:layout_marginTop="54dp"
         android:onClick="grabJsonFourthPeriod"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kies periode"
+        android:id="@+id/button5"
+        android:layout_marginTop="350dp"
+        android:layout_marginLeft="100dp"
+        android:onClick="showButtons"
+        android:visibility="invisible" />
 </RelativeLayout>
