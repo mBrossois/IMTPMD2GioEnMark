@@ -141,7 +141,8 @@ public class InvoerScherm extends AppCompatActivity
             Intent intent = new Intent(this, OverzichtScherm.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
-
+            Intent intent = new Intent(this, Persoonsscherm.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
 
         }
