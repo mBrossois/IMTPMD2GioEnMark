@@ -155,84 +155,48 @@ public class InvoerScherm extends AppCompatActivity
 
     public void grabJsonFirstPeriod(View view) {
         int getLengte = subjects.size();
-        int lengte = 0;
-        int start = 0;
-        for(int i = 0; i < getLengte; i++)
-        {
-
-            if(Integer.parseInt(subjects.get(i).period) == 1)
-            {
-                if(start == 0)
-                {
-                    start = i + 1;
-                }
-                lengte +=1;
-            }
-        }
+        int periode = 1;
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
-        grabPeriod(rl, lengte, start);
+        grabPeriod(rl, getLengte, periode);
     }
    public void grabJsonSecondPeriod(View view)
     {
 
-        int getLengte = subjects.size();
-        int lengte = 0;
-        int start = 0;
-        for(int i = 0; i < getLengte; i++)
-        {
-
-            if(Integer.parseInt(subjects.get(i).period) == 2)
-            {
-                if(start == 0)
-                {
-                    start = i + 1;
-                }
-                lengte +=1;
-            }
-        }
+        int getLengte = subjects.size();;
+        int periode = 2;
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
-        grabPeriod(rl, lengte, start);
+        grabPeriod(rl, getLengte, periode);
 
         }
     public void grabJsonThirthPeriod(View view) {
         int getLengte = subjects.size();
-        int lengte = 0;
-        int start = 0;
-        for(int i = 0; i < getLengte; i++) {
+        int periode = 3;
 
-            if (Integer.parseInt(subjects.get(i).period) == 3) {
-                if (start == 0) {
-                    start = i + 1;
-                }
-                lengte += 1;
-            }
-        }
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
-        grabPeriod(rl, lengte, start);
+        grabPeriod(rl, getLengte, periode);
     }
 
     public void grabJsonFourthPeriod(View view)
     {
         int getLengte = subjects.size();
-        int lengte = 0;
-        int start = 0;
-        for(int i = 0; i < getLengte; i++)
-        {
-
-            if(Integer.parseInt(subjects.get(i).period) == 4)
-            {
-                if(start == 0)
-                {
-                    start = i + 1;
-                }
-                lengte +=1;
-            }
-        }
+        int periode = 4;
+//        for(int i = 0; i < getLengte; i++)
+//        {
+//
+//            if(Integer.parseInt(subjects.get(i).period) == 4)
+//            {
+//                if(start == 0)
+//                {
+//                    start = i + 1;
+//                }
+//                lengte +=1;
+//            }
+//        }
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
-        grabPeriod(rl, getLengte, start);
+        grabPeriod(rl, getLengte, periode);
 
 
 //        ImageView iv = new ImageView(this);
@@ -272,7 +236,15 @@ public class InvoerScherm extends AppCompatActivity
         int groeyX = 150;
         int groeyY = 30;
         int positie = 0;
-        for (int i = 0; i < lengte; i++) {
+        Button b1 = (Button)findViewById(R.id.button);
+        Button b2 = (Button)findViewById(R.id.button2);
+        Button b3 = (Button)findViewById(R.id.button3);
+        Button b4 = (Button)findViewById(R.id.button4);
+        b1.setVisibility(View.GONE);
+        b2.setVisibility(View.GONE);
+        b3.setVisibility(View.GONE);
+        b4.setVisibility(View.GONE);
+        for (int i = 0; i < (lengte + 1); i++) {
             if (i == 0) {
                 groeyX = 135;
                 for (int j = 0; j < 4; j++) {
@@ -280,9 +252,8 @@ public class InvoerScherm extends AppCompatActivity
                 }
             } else {
                 groeyX = 150;
-                if(Integer.parseInt(subjects.get(i).period) != periode)
                 {
-                    i++;
+
                 }
                 else
                 {
