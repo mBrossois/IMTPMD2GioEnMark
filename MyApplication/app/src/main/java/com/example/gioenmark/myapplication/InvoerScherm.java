@@ -238,7 +238,7 @@ public class InvoerScherm extends AppCompatActivity
     public void grabPeriod(RelativeLayout rl, int lengte, int periode) {
 
         int groeyX = 150;
-        int groeyY = 30;
+        int groeyY = 80;
         int positie = 0;
         Button b1 = (Button) findViewById(R.id.button);
         Button b2 = (Button) findViewById(R.id.button2);
@@ -254,18 +254,34 @@ public class InvoerScherm extends AppCompatActivity
         v1.setVisibility(View.GONE);
         for (int i = 0; i < (lengte + 1); i++) {
             if (i == 0) {
-                groeyX = 135;
                 for (int j = 0; j < 4; j++) {
-                    makeLayout(rl, groeyX, groeyY, i, j, positie);
+                    if(i > 1)
+                    {
+                        makeLayout(rl, 80, groeyY, i, j, positie);
+                    }
+                    else {
+                        makeLayout(rl, 135, groeyY, i, j, positie);
+                    }
                 }
             } else {
-                groeyX = 150;
                 if (Integer.parseInt(subjects.get(i - 1).period) != periode) {
 
                 } else {
                     positie++;
                     for (int j = 0; j < 5; j++) {
-                        makeLayout(rl, groeyX, groeyY, i, j, positie);
+                        if(j ==4)
+                        {
+                            makeLayout(rl, 120, groeyY, i, j, positie);
+                        }
+                        else if (j > 1)
+                        {
+                            makeLayout(rl, 135, groeyY, i, j, positie);
+                        }
+                        else
+                        {
+                            makeLayout(rl, groeyX, groeyY, i, j, positie);
+                        }
+
                     }
                 }
             }
@@ -280,7 +296,14 @@ public class InvoerScherm extends AppCompatActivity
         int y = 5;
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(x + (groeyX * j), y + (groeyY * positie), 0, 0);
+        if (j == 4)
+        {
+            layoutParams.setMargins(x + (groeyX * j), y + (groeyY * positie) - 25, 0, 0);
+        }
+        else
+        {
+            layoutParams.setMargins(x + (groeyX * j), y + (groeyY * positie), 0, 0);
+        }
 
         TextView textView = new TextView(this);
         Button button = new Button(this);
@@ -305,11 +328,19 @@ public class InvoerScherm extends AppCompatActivity
                 textView.setText(subjects.get(i - 1).ects);
             } else if (j == 2) {
                 textView.setText(subjects.get(i - 1).grade);
-            } else {
+            } else if(j == 3){
                 textView.setText(subjects.get(i - 1).period);
             }
+            else
+            {
+                button.setText("Edit");
+//                ViewGroup.LayoutParams rlm = button.getLayoutParams();
+//                rlm.height=40;
+//                button.setBackgroundResource(R.color.colorAccent);
+//                button.setHeight(5);
+            }
         }
-        if (j == 4) {
+        if (j == 4 && i >0) {
             rl.addView(button);
         } else {
             rl.addView(textView);
