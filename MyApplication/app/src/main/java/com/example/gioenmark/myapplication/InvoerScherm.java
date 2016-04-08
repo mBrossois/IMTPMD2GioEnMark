@@ -48,8 +48,9 @@ import java.util.List;
 
 public class InvoerScherm extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-     Course[] courses;
-     List<Course> subjects;
+    Course[] courses;
+    List<Course> subjects;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,24 +59,14 @@ public class InvoerScherm extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        String json = "[{name:'Progr.Mob.Devs', ects:3, code:’IMTPMD’, grade:6}," +
-                "{name: 'MT PROJECT', ects: 6, code: ‘IPOMED3’, grade:6}]";
-
-        Gson gson = new Gson();		// Dependency in gradle - see next slide
-
-        courses = gson.fromJson(json, Course[].class);	// CONVERT JSON
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hardcoded From JSON"+courses[0].grade, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Hardcoded From JSON" + courses[0].grade, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-        Snackbar.make(this.findViewById(android.R.id.content), "Hardcoded From JSON"+courses[0].ects, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -154,6 +145,11 @@ public class InvoerScherm extends AppCompatActivity
         return true;
     }
 
+    public void showButtons(View view) {
+        Intent intent = new Intent(this, InvoerScherm.class);
+        startActivity(intent);
+    }
+
     public void grabJsonFirstPeriod(View view) {
         int getLengte = subjects.size();
         int periode = 1;
@@ -161,16 +157,18 @@ public class InvoerScherm extends AppCompatActivity
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
     }
-   public void grabJsonSecondPeriod(View view)
-    {
 
-        int getLengte = subjects.size();;
+    public void grabJsonSecondPeriod(View view) {
+
+        int getLengte = subjects.size();
+        ;
         int periode = 2;
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
 
-        }
+    }
+
     public void grabJsonThirthPeriod(View view) {
         int getLengte = subjects.size();
         int periode = 3;
@@ -179,8 +177,7 @@ public class InvoerScherm extends AppCompatActivity
         grabPeriod(rl, getLengte, periode);
     }
 
-    public void grabJsonFourthPeriod(View view)
-    {
+    public void grabJsonFourthPeriod(View view) {
         int getLengte = subjects.size();
         int periode = 4;
 //        for(int i = 0; i < getLengte; i++)
@@ -208,28 +205,34 @@ public class InvoerScherm extends AppCompatActivity
 //        rl.addView(iv, params);
     }
 
-    private void requestSubjects(){
-        Type type = new TypeToken<List<Course>>(){}.getType();
+    private void requestSubjects() {
+        Type type = new TypeToken<List<Course>>() {
+        }.getType();
         GsonRequest<List<Course>> request = new GsonRequest<List<Course>>(
                 "http://fuujokan.nl/subject_lijst.json", type, null,
                 new Response.Listener<List<Course>>() {
                     @Override
-                    public void onResponse(List<Course> response) { processRequestSucces(response); }
-                }, new Response.ErrorListener(){
+                    public void onResponse(List<Course> response) {
+                        processRequestSucces(response);
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error){ processRequestError(error);     }
+            public void onErrorResponse(VolleyError error) {
+                processRequestError(error);
+            }
         }
         );
         VolleyHelper.getInstance(this).addToRequestQueue(request);
         //courses = Course;
     }
 
-    private void processRequestSucces(List<Course> subjects ){
+    private void processRequestSucces(List<Course> subjects) {
 
         this.subjects = subjects;
     }
 
-    private void processRequestError(VolleyError error){  }
+    private void processRequestError(VolleyError error) {
+    }
 
 
     public void grabPeriod(RelativeLayout rl, int lengte, int periode) {
@@ -237,14 +240,16 @@ public class InvoerScherm extends AppCompatActivity
         int groeyX = 150;
         int groeyY = 30;
         int positie = 0;
-        Button b1 = (Button)findViewById(R.id.button);
-        Button b2 = (Button)findViewById(R.id.button2);
-        Button b3 = (Button)findViewById(R.id.button3);
-        Button b4 = (Button)findViewById(R.id.button4);
+        Button b1 = (Button) findViewById(R.id.button);
+        Button b2 = (Button) findViewById(R.id.button2);
+        Button b3 = (Button) findViewById(R.id.button3);
+        Button b4 = (Button) findViewById(R.id.button4);
+        Button b5 = (Button) findViewById(R.id.button5);
         b1.setVisibility(View.GONE);
         b2.setVisibility(View.GONE);
         b3.setVisibility(View.GONE);
         b4.setVisibility(View.GONE);
+        b5.setVisibility(View.VISIBLE);
         for (int i = 0; i < (lengte + 1); i++) {
             if (i == 0) {
                 groeyX = 135;
@@ -253,14 +258,11 @@ public class InvoerScherm extends AppCompatActivity
                 }
             } else {
                 groeyX = 150;
-                if(Integer.parseInt(subjects.get(i -1).period) != periode)
-                {
+                if (Integer.parseInt(subjects.get(i - 1).period) != periode) {
 
-                }
-                else
-                {
+                } else {
                     positie++;
-                    for (int j = 0; j < 4; j++) {
+                    for (int j = 0; j < 5; j++) {
                         makeLayout(rl, groeyX, groeyY, i, j, positie);
                     }
                 }
@@ -269,18 +271,21 @@ public class InvoerScherm extends AppCompatActivity
 
         }
     }
-public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, int positie)
-{
 
-    int x = 5;
-    int y = 5;
+    public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, int positie) {
+
+        int x = 5;
+        int y = 5;
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(x + (groeyX * j), y + (groeyY * positie), 0, 0);
 
         TextView textView = new TextView(this);
+        Button button = new Button(this);
 
         textView.setLayoutParams(layoutParams);
+        button.setLayoutParams(layoutParams);
+
         if (i == 0) {
             if (j == 0) {
                 textView.setText("Name");
@@ -302,9 +307,12 @@ public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, 
                 textView.setText(subjects.get(i - 1).period);
             }
         }
+        if (j == 4) {
+            rl.addView(button);
+        } else {
+            rl.addView(textView);
+        }
 
-        rl.addView(textView);
 
-
-}
+    }
 }
