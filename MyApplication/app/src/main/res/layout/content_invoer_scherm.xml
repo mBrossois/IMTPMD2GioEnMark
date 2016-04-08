@@ -67,7 +67,7 @@
         android:text="Kies periode"
         android:id="@+id/button5"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="360dp"
         android:onClick="showButtons"
         android:visibility="invisible"
         android:background="#008383"
