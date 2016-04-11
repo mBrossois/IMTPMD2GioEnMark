@@ -1,12 +1,16 @@
 package com.example.gioenmark.myapplication;
 
 import android.app.ActionBar;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -29,6 +33,8 @@ import com.android.volley.VolleyError;
 import com.example.gioenmark.myapplication.GSON.GsonRequest;
 import com.example.gioenmark.myapplication.Models.Course;
 import com.example.gioenmark.myapplication.VOLLEYHELPER.VolleyHelper;
+import com.example.gioenmark.myapplication.database.DatabaseHelper;
+import com.example.gioenmark.myapplication.database.Databaseinfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,7 +56,9 @@ public class InvoerScherm extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Course[] courses;
     List<Course> subjects;
-
+    DatabaseHelper dbHelper;
+    ContentValues values;
+    int chosenId= 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +87,7 @@ public class InvoerScherm extends AppCompatActivity
         navigationView.getMenu().getItem(1).setChecked(true);
 
         requestSubjects();
+
     }
 
     @Override
@@ -149,20 +158,41 @@ public class InvoerScherm extends AppCompatActivity
         Intent intent = new Intent(this, InvoerScherm.class);
         startActivity(intent);
     }
+    public void createDatabase()
+    {
+        int getLengte = subjects.size();
 
+//        RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
+      //  grabPeriod(rl, getLengte, periode);
+          jsonToDatabase(getLengte);
+    }
     public void grabJsonFirstPeriod(View view) {
         int getLengte = subjects.size();
-        int periode = 1;
+        String periode = "%1%";
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
+
+        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, null, null, null, null, null);
+
+        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
+// Maar : de rij kan nog steeds leeg zijn
+// Hoe  : lossen we dit op ??
+
+// Haalt de name uit de resultset
+        String name = (String) rs.getString(rs.getColumnIndex("name"));
+
+// Even checken of dit goed binnen komt
+        Log.i("Michiel deze gevonden=", "deze :"+ name);
+
+
     }
 
     public void grabJsonSecondPeriod(View view) {
 
         int getLengte = subjects.size();
-        ;
-        int periode = 2;
+
+        String periode = "2";
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
@@ -171,7 +201,7 @@ public class InvoerScherm extends AppCompatActivity
 
     public void grabJsonThirthPeriod(View view) {
         int getLengte = subjects.size();
-        int periode = 3;
+        String periode = "3";
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
@@ -179,7 +209,7 @@ public class InvoerScherm extends AppCompatActivity
 
     public void grabJsonFourthPeriod(View view) {
         int getLengte = subjects.size();
-        int periode = 4;
+        String periode = "4";
 //        for(int i = 0; i < getLengte; i++)
 //        {
 //
@@ -229,13 +259,14 @@ public class InvoerScherm extends AppCompatActivity
     private void processRequestSucces(List<Course> subjects) {
 
         this.subjects = subjects;
+        createDatabase();
     }
 
     private void processRequestError(VolleyError error) {
     }
 
 
-    public void grabPeriod(RelativeLayout rl, int lengte, int periode) {
+    public void grabPeriod(RelativeLayout rl, int lengte, String periode) {
 
         int groeyX = 150;
         int groeyY = 80;
@@ -252,42 +283,58 @@ public class InvoerScherm extends AppCompatActivity
         b4.setVisibility(View.GONE);
         b5.setVisibility(View.VISIBLE);
         v1.setVisibility(View.GONE);
-        for (int i = 0; i < (lengte + 1); i++) {
-            if (i == 0) {
-                for (int j = 0; j < 4; j++) {
-                    if(i > 1)
-                    {
-                        makeLayout(rl, 80, groeyY, i, j, positie);
-                    }
-                    else {
-                        makeLayout(rl, 135, groeyY, i, j, positie);
-                    }
-                }
-            } else {
-                if (Integer.parseInt(subjects.get(i - 1).period) != periode) {
+        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "period like 3 ", null, null, null, null);
 
-                } else {
-                    positie++;
-                    for (int j = 0; j < 5; j++) {
-                        if(j ==4)
-                        {
-                            makeLayout(rl, 120, groeyY, i, j, positie);
-                        }
-                        else if (j > 1)
-                        {
-                            makeLayout(rl, 135, groeyY, i, j, positie);
-                        }
-                        else
-                        {
-                            makeLayout(rl, groeyX, groeyY, i, j, positie);
-                        }
+        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
+// Maar : de rij kan nog steeds leeg zijn
+// Hoe  : lossen we dit op ??
 
-                    }
-                }
-            }
-
-
+// Haalt de name uit de resultset
+//        String name = (String) rs.getString(rs.getColumnIndex("name"));
+//        String data;
+        String name;
+       while(rs.moveToNext())
+        {
+            // your calculation goes here
+             name = rs.getString(rs.getColumnIndex("name"));
+            Log.i("Michiel deze gevonden=", "deze :" + name);
         }
+////    }
+//    rs.close();
+
+// Even checken of dit goed binnen komt
+
+//        for (int i = 0; i < (lengte + 1); i++) {
+//            if (i == 0) {
+//                for (int j = 0; j < 4; j++) {
+//                    if(i > 1)
+//                    {
+//                        makeLayout(rl, 80, groeyY, i, j, positie);
+//                    }
+//                    else {
+//                        makeLayout(rl, 135, groeyY, i, j, positie);
+//                    }
+//                }
+//            } else {
+//                    positie++;
+//                    for (int j = 0; j < 5; j++) {
+//                        if(j ==4)
+//                        {
+//                            makeLayout(rl, 120, groeyY, i, j, positie);
+//                        }
+//                        else if (j > 1)
+//                        {
+//                            makeLayout(rl, 135, groeyY, i, j, positie);
+//                        }
+//                        else
+//                        {
+//                            makeLayout(rl, groeyX, groeyY, i, j, positie);
+//                        }
+//                }
+//            }
+//
+//
+//        }
     }
 
     public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, int positie) {
@@ -334,6 +381,16 @@ public class InvoerScherm extends AppCompatActivity
             else
             {
                 button.setText("Edit");
+                button.setId(i - 1);
+                button.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        chosenId = v.getId();
+                        Intent i = new Intent(getApplicationContext(), DetailsScherm.class);
+                        i.putExtra("chosenId", chosenId);
+                        startActivity(i);
+                    }
+                });
 //                ViewGroup.LayoutParams rlm = button.getLayoutParams();
 //                rlm.height=40;
 //                button.setBackgroundResource(R.color.colorAccent);
@@ -348,4 +405,21 @@ public class InvoerScherm extends AppCompatActivity
 
 
     }
+    public void jsonToDatabase(int lengte)
+    {
+        dbHelper = DatabaseHelper.getHelper(this);
+        values = new ContentValues();
+
+        for (int i = 0; i < lengte; i++) {
+            values.put(Databaseinfo.CourseColumn.NAME, subjects.get(i).name);
+            values.put(Databaseinfo.CourseColumn.ECTS, subjects.get(i).ects);
+            values.put(Databaseinfo.CourseColumn.GRADE, subjects.get(i).grade);
+            values.put(Databaseinfo.CourseColumn.PERIOD, subjects.get(i).period);
+            dbHelper.insert(Databaseinfo.CourseTables.COURSE, null, values);
+
+        }
+        Snackbar.make(this.findViewById(android.R.id.content), "Inserted an entry in the DB", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
 }

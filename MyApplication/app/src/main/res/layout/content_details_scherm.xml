@@ -12,4 +12,13 @@
     tools:context="com.example.gioenmark.myapplication.DetailsScherm"
     tools:showIn="@layout/app_bar_details_scherm">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textViewId"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="84dp" />
 </RelativeLayout>
