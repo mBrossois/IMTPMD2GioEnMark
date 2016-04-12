@@ -168,22 +168,22 @@ public class InvoerScherm extends AppCompatActivity
     }
     public void grabJsonFirstPeriod(View view) {
         int getLengte = subjects.size();
-        String periode = "%1%";
+        String periode = "1";
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
 
-        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, null, null, null, null, null);
+//        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, null, null, null, null, null);
 
-        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
+//        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
 // Maar : de rij kan nog steeds leeg zijn
 // Hoe  : lossen we dit op ??
 
 // Haalt de name uit de resultset
-        String name = (String) rs.getString(rs.getColumnIndex("name"));
+//        String name = (String) rs.getString(rs.getColumnIndex("name"));
 
 // Even checken of dit goed binnen komt
-        Log.i("Michiel deze gevonden=", "deze :"+ name);
+//        Log.i("Michiel deze gevonden=", "deze :"+ name);
 
 
     }
@@ -283,7 +283,7 @@ public class InvoerScherm extends AppCompatActivity
         b4.setVisibility(View.GONE);
         b5.setVisibility(View.VISIBLE);
         v1.setVisibility(View.GONE);
-        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "period like 3 ", null, null, null, null);
+        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "period like " + periode, null, null, null, null);
 
         rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
 // Maar : de rij kan nog steeds leeg zijn
@@ -292,13 +292,31 @@ public class InvoerScherm extends AppCompatActivity
 // Haalt de name uit de resultset
 //        String name = (String) rs.getString(rs.getColumnIndex("name"));
 //        String data;
-        String name;
-       while(rs.moveToNext())
+
+        for (int j = 0; j < 4; j++) {
+            if (j > 1) {
+                makeLayout(rl, 125, groeyY, 0, j, positie, "TopText");
+            } else {
+                makeLayout(rl, 135, groeyY, 0, j, positie, "TopText");
+            }
+        }
+       do
         {
             // your calculation goes here
-             name = rs.getString(rs.getColumnIndex("name"));
-            Log.i("Michiel deze gevonden=", "deze :" + name);
+            String name = rs.getString(rs.getColumnIndex("name"));
+            String ects = rs.getString(rs.getColumnIndex("ects"));
+            String grade = rs.getString(rs.getColumnIndex("grade"));
+            String period = rs.getString(rs.getColumnIndex("period"));
+
+            positie++;
+            makeLayout(rl, groeyX, groeyY, 1, 0, positie,name);
+            makeLayout(rl, groeyX, groeyY, 1, 1, positie, ects);
+            makeLayout(rl, 135, groeyY, 1, 2, positie, grade);
+            makeLayout(rl, 135, groeyY, 1, 3, positie, period);
+            makeLayout(rl, 120, groeyY, 1, 4, positie, "button");
+
         }
+       while(rs.moveToNext());
 ////    }
 //    rs.close();
 
@@ -337,7 +355,7 @@ public class InvoerScherm extends AppCompatActivity
 //        }
     }
 
-    public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, int positie) {
+    public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, int positie, String textTextField) {
 
         int x = 5;
         int y = 5;
@@ -370,13 +388,13 @@ public class InvoerScherm extends AppCompatActivity
             }
         } else {
             if (j == 0) {
-                textView.setText(subjects.get(i - 1).name);
+                textView.setText(textTextField);
             } else if (j == 1) {
-                textView.setText(subjects.get(i - 1).ects);
+                textView.setText(textTextField);
             } else if (j == 2) {
-                textView.setText(subjects.get(i - 1).grade);
+                textView.setText(textTextField);
             } else if(j == 3){
-                textView.setText(subjects.get(i - 1).period);
+                textView.setText(textTextField);
             }
             else
             {
@@ -409,17 +427,27 @@ public class InvoerScherm extends AppCompatActivity
     {
         dbHelper = DatabaseHelper.getHelper(this);
         values = new ContentValues();
-
+        int change = 0;
         for (int i = 0; i < lengte; i++) {
-            values.put(Databaseinfo.CourseColumn.NAME, subjects.get(i).name);
-            values.put(Databaseinfo.CourseColumn.ECTS, subjects.get(i).ects);
-            values.put(Databaseinfo.CourseColumn.GRADE, subjects.get(i).grade);
-            values.put(Databaseinfo.CourseColumn.PERIOD, subjects.get(i).period);
-            dbHelper.insert(Databaseinfo.CourseTables.COURSE, null, values);
+            Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "name like '" + subjects.get(i).name + "'", null, null, null, null);
+            if(rs.moveToFirst()) {
 
+            }
+            else
+            {
+                change = 1;
+                values.put(Databaseinfo.CourseColumn.NAME, subjects.get(i).name);
+                values.put(Databaseinfo.CourseColumn.ECTS, subjects.get(i).ects);
+                values.put(Databaseinfo.CourseColumn.GRADE, subjects.get(i).grade);
+                values.put(Databaseinfo.CourseColumn.PERIOD, subjects.get(i).period);
+                dbHelper.insert(Databaseinfo.CourseTables.COURSE, null, values);
+            }
         }
-        Snackbar.make(this.findViewById(android.R.id.content), "Inserted an entry in the DB", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        if(change == 1) {
+
+            Snackbar.make(this.findViewById(android.R.id.content), "Inserted an entry in the DB", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
 }
