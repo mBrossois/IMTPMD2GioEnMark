@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + Databaseinfo.CourseTables.COURSE + " (" +
                 BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Databaseinfo.CourseColumn.NAME + " TEXT," + Databaseinfo.CourseColumn.ECTS + " TEXT," +
-                Databaseinfo.CourseColumn.PERIOD + " TEXT," + Databaseinfo.CourseColumn.GRADE + " TEXT," + Databaseinfo.CourseColumn.GEHAALD + " TEXT,);"
+                Databaseinfo.CourseColumn.PERIOD + " TEXT," + Databaseinfo.CourseColumn.GRADE + " TEXT," + Databaseinfo.CourseColumn.GEHAALD + " TEXT);"
         );
     }
 
@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version ){
-        super(context,name,factory, version);
+        super(context, name, factory, version);
     }
 
     public void insert(String table, String nullColumnHack, ContentValues values){
@@ -59,6 +59,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void replace(String table, String nullColumnHack, ContentValues values) {
+        mSQLDB.replace(table, nullColumnHack, values);
+    }
 }
 
 

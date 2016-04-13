@@ -15,7 +15,7 @@ public class Databaseinfo {
             public static final String ECTS = "ects";        // NAAM VAN DE KOLOMMEN
             public static final String GRADE = "grade";           // CIJFER
             public static final String PERIOD = "period";     // periode (1/2/3/4)
-            public static final String GEHAALD = "Gehaald";   //Gehaald of niet
+            public static final String GEHAALD = "gehaald";   //Gehaald of niet
         }
 
 

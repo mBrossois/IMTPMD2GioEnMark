@@ -58,8 +58,8 @@ public class InvoerScherm extends AppCompatActivity
     List<Course> subjects;
     DatabaseHelper dbHelper;
     ContentValues values;
-    int chosenId= 0;
-    int dePeriode = 0;
+//    int chosenId= 0;
+    Cursor rs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,7 +170,7 @@ public class InvoerScherm extends AppCompatActivity
     public void grabJsonFirstPeriod(View view) {
         int getLengte = subjects.size();
         String periode = "1";
-        dePeriode = 1;
+//        dePeriode = 1;
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
 
@@ -194,7 +194,7 @@ public class InvoerScherm extends AppCompatActivity
         int getLengte = subjects.size();
 
         String periode = "2";
-        dePeriode = 1;
+//        dePeriode = 1;
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
 
@@ -203,7 +203,7 @@ public class InvoerScherm extends AppCompatActivity
     public void grabJsonThirthPeriod(View view) {
         int getLengte = subjects.size();
         String periode = "3";
-        dePeriode = 1;
+//        dePeriode = 1;
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
     }
@@ -211,7 +211,7 @@ public class InvoerScherm extends AppCompatActivity
     public void grabJsonFourthPeriod(View view) {
         int getLengte = subjects.size();
         String periode = "4";
-        dePeriode = 1;
+//        dePeriode = 1;
 //        for(int i = 0; i < getLengte; i++)
 //        {
 //
@@ -285,7 +285,7 @@ public class InvoerScherm extends AppCompatActivity
         b4.setVisibility(View.GONE);
         b5.setVisibility(View.VISIBLE);
         v1.setVisibility(View.GONE);
-        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "period like " + periode, null, null, null, null);
+        rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "period like " + periode, null, null, null, null);
 
         rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
 // Maar : de rij kan nog steeds leeg zijn
@@ -405,9 +405,15 @@ public class InvoerScherm extends AppCompatActivity
                 button.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        chosenId = v.getId();
+                        int chosenId = v.getId();
+                        rs.moveToFirst();
+                        for(int i = 0; i < chosenId; i++)
+                        {
+                            rs.moveToNext();
+                        }
+                        String name = rs.getString(rs.getColumnIndex("name"));
                         Intent i = new Intent(getApplicationContext(), DetailsScherm.class);
-                        i.putExtra("chosenId", chosenId);
+                        i.putExtra("chosenName", name);
                         startActivity(i);
                     }
                 });
@@ -442,6 +448,7 @@ public class InvoerScherm extends AppCompatActivity
                 values.put(Databaseinfo.CourseColumn.ECTS, subjects.get(i).ects);
                 values.put(Databaseinfo.CourseColumn.GRADE, subjects.get(i).grade);
                 values.put(Databaseinfo.CourseColumn.PERIOD, subjects.get(i).period);
+                values.put(Databaseinfo.CourseColumn.GEHAALD, "O");
                 dbHelper.insert(Databaseinfo.CourseTables.COURSE, null, values);
             }
         }
