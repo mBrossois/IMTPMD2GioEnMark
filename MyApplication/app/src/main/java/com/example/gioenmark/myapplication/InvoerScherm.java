@@ -1,12 +1,16 @@
 package com.example.gioenmark.myapplication;
 
 import android.app.ActionBar;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -29,6 +33,8 @@ import com.android.volley.VolleyError;
 import com.example.gioenmark.myapplication.GSON.GsonRequest;
 import com.example.gioenmark.myapplication.Models.Course;
 import com.example.gioenmark.myapplication.VOLLEYHELPER.VolleyHelper;
+import com.example.gioenmark.myapplication.database.DatabaseHelper;
+import com.example.gioenmark.myapplication.database.Databaseinfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -48,8 +54,11 @@ import java.util.List;
 
 public class InvoerScherm extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-     Course[] courses;
-     List<Course> subjects;
+    Course[] courses;
+    List<Course> subjects;
+    DatabaseHelper dbHelper;
+    ContentValues values;
+    int chosenId= 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,24 +67,14 @@ public class InvoerScherm extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        String json = "[{name:'Progr.Mob.Devs', ects:3, code:’IMTPMD’, grade:6}," +
-                "{name: 'MT PROJECT', ects: 6, code: ‘IPOMED3’, grade:6}]";
-
-        Gson gson = new Gson();		// Dependency in gradle - see next slide
-
-        courses = gson.fromJson(json, Course[].class);	// CONVERT JSON
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hardcoded From JSON"+courses[0].grade, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Hardcoded From JSON" + courses[0].grade, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-        Snackbar.make(this.findViewById(android.R.id.content), "Hardcoded From JSON"+courses[0].ects, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,6 +87,7 @@ public class InvoerScherm extends AppCompatActivity
         navigationView.getMenu().getItem(1).setChecked(true);
 
         requestSubjects();
+
     }
 
     @Override
@@ -154,35 +154,62 @@ public class InvoerScherm extends AppCompatActivity
         return true;
     }
 
+    public void showButtons(View view) {
+        Intent intent = new Intent(this, InvoerScherm.class);
+        startActivity(intent);
+    }
+    public void createDatabase()
+    {
+        int getLengte = subjects.size();
+
+//        RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
+      //  grabPeriod(rl, getLengte, periode);
+          jsonToDatabase(getLengte);
+    }
     public void grabJsonFirstPeriod(View view) {
         int getLengte = subjects.size();
-        int periode = 1;
+        String periode = "1";
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
+
+//        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, null, null, null, null, null);
+
+//        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
+// Maar : de rij kan nog steeds leeg zijn
+// Hoe  : lossen we dit op ??
+
+// Haalt de name uit de resultset
+//        String name = (String) rs.getString(rs.getColumnIndex("name"));
+
+// Even checken of dit goed binnen komt
+//        Log.i("Michiel deze gevonden=", "deze :"+ name);
+
+
     }
-   public void grabJsonSecondPeriod(View view)
-    {
 
-        int getLengte = subjects.size();;
-        int periode = 2;
+    public void grabJsonSecondPeriod(View view) {
+
+        int getLengte = subjects.size();
+
+        String periode = "2";
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
 
-        }
+    }
+
     public void grabJsonThirthPeriod(View view) {
         int getLengte = subjects.size();
-        int periode = 3;
+        String periode = "3";
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
     }
 
-    public void grabJsonFourthPeriod(View view)
-    {
+    public void grabJsonFourthPeriod(View view) {
         int getLengte = subjects.size();
-        int periode = 4;
+        String periode = "4";
 //        for(int i = 0; i < getLengte; i++)
 //        {
 //
@@ -208,79 +235,147 @@ public class InvoerScherm extends AppCompatActivity
 //        rl.addView(iv, params);
     }
 
-    private void requestSubjects(){
-        Type type = new TypeToken<List<Course>>(){}.getType();
+    private void requestSubjects() {
+        Type type = new TypeToken<List<Course>>() {
+        }.getType();
         GsonRequest<List<Course>> request = new GsonRequest<List<Course>>(
                 "http://fuujokan.nl/subject_lijst.json", type, null,
                 new Response.Listener<List<Course>>() {
                     @Override
-                    public void onResponse(List<Course> response) { processRequestSucces(response); }
-                }, new Response.ErrorListener(){
+                    public void onResponse(List<Course> response) {
+                        processRequestSucces(response);
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error){ processRequestError(error);     }
+            public void onErrorResponse(VolleyError error) {
+                processRequestError(error);
+            }
         }
         );
         VolleyHelper.getInstance(this).addToRequestQueue(request);
         //courses = Course;
     }
 
-    private void processRequestSucces(List<Course> subjects ){
+    private void processRequestSucces(List<Course> subjects) {
 
         this.subjects = subjects;
+        createDatabase();
     }
 
-    private void processRequestError(VolleyError error){  }
+    private void processRequestError(VolleyError error) {
+    }
 
 
-    public void grabPeriod(RelativeLayout rl, int lengte, int periode) {
+    public void grabPeriod(RelativeLayout rl, int lengte, String periode) {
 
         int groeyX = 150;
-        int groeyY = 30;
+        int groeyY = 80;
         int positie = 0;
-        Button b1 = (Button)findViewById(R.id.button);
-        Button b2 = (Button)findViewById(R.id.button2);
-        Button b3 = (Button)findViewById(R.id.button3);
-        Button b4 = (Button)findViewById(R.id.button4);
+        Button b1 = (Button) findViewById(R.id.button);
+        Button b2 = (Button) findViewById(R.id.button2);
+        Button b3 = (Button) findViewById(R.id.button3);
+        Button b4 = (Button) findViewById(R.id.button4);
+        Button b5 = (Button) findViewById(R.id.button5);
+        TextView v1 = (TextView) findViewById(R.id.Textkeuze);
         b1.setVisibility(View.GONE);
         b2.setVisibility(View.GONE);
         b3.setVisibility(View.GONE);
         b4.setVisibility(View.GONE);
-        for (int i = 0; i < (lengte + 1); i++) {
-            if (i == 0) {
-                groeyX = 135;
-                for (int j = 0; j < 4; j++) {
-                    makeLayout(rl, groeyX, groeyY, i, j, positie);
-                }
+        b5.setVisibility(View.VISIBLE);
+        v1.setVisibility(View.GONE);
+        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "period like " + periode, null, null, null, null);
+
+        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
+// Maar : de rij kan nog steeds leeg zijn
+// Hoe  : lossen we dit op ??
+
+// Haalt de name uit de resultset
+//        String name = (String) rs.getString(rs.getColumnIndex("name"));
+//        String data;
+
+        for (int j = 0; j < 4; j++) {
+            if (j > 1) {
+                makeLayout(rl, 125, groeyY, 0, j, positie, "TopText");
             } else {
-                groeyX = 150;
-                if(Integer.parseInt(subjects.get(i -1).period) != periode)
-                {
-
-                }
-                else
-                {
-                    positie++;
-                    for (int j = 0; j < 4; j++) {
-                        makeLayout(rl, groeyX, groeyY, i, j, positie);
-                    }
-                }
+                makeLayout(rl, 135, groeyY, 0, j, positie, "TopText");
             }
+        }
+       do
+        {
+            // your calculation goes here
+            String name = rs.getString(rs.getColumnIndex("name"));
+            String ects = rs.getString(rs.getColumnIndex("ects"));
+            String grade = rs.getString(rs.getColumnIndex("grade"));
+            String period = rs.getString(rs.getColumnIndex("period"));
 
+            positie++;
+            makeLayout(rl, groeyX, groeyY, 1, 0, positie,name);
+            makeLayout(rl, groeyX, groeyY, 1, 1, positie, ects);
+            makeLayout(rl, 135, groeyY, 1, 2, positie, grade);
+            makeLayout(rl, 135, groeyY, 1, 3, positie, period);
+            makeLayout(rl, 120, groeyY, 1, 4, positie, "button");
 
         }
-    }
-public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, int positie)
-{
+       while(rs.moveToNext());
+////    }
+//    rs.close();
 
-    int x = 5;
-    int y = 5;
+// Even checken of dit goed binnen komt
+
+//        for (int i = 0; i < (lengte + 1); i++) {
+//            if (i == 0) {
+//                for (int j = 0; j < 4; j++) {
+//                    if(i > 1)
+//                    {
+//                        makeLayout(rl, 80, groeyY, i, j, positie);
+//                    }
+//                    else {
+//                        makeLayout(rl, 135, groeyY, i, j, positie);
+//                    }
+//                }
+//            } else {
+//                    positie++;
+//                    for (int j = 0; j < 5; j++) {
+//                        if(j ==4)
+//                        {
+//                            makeLayout(rl, 120, groeyY, i, j, positie);
+//                        }
+//                        else if (j > 1)
+//                        {
+//                            makeLayout(rl, 135, groeyY, i, j, positie);
+//                        }
+//                        else
+//                        {
+//                            makeLayout(rl, groeyX, groeyY, i, j, positie);
+//                        }
+//                }
+//            }
+//
+//
+//        }
+    }
+
+    public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, int positie, String textTextField) {
+
+        int x = 5;
+        int y = 5;
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(x + (groeyX * j), y + (groeyY * positie), 0, 0);
+        if (j == 4)
+        {
+            layoutParams.setMargins(x + (groeyX * j), y + (groeyY * positie) - 25, 0, 0);
+        }
+        else
+        {
+            layoutParams.setMargins(x + (groeyX * j), y + (groeyY * positie), 0, 0);
+        }
 
         TextView textView = new TextView(this);
+        Button button = new Button(this);
 
         textView.setLayoutParams(layoutParams);
+        button.setLayoutParams(layoutParams);
+
         if (i == 0) {
             if (j == 0) {
                 textView.setText("Name");
@@ -293,18 +388,66 @@ public void makeLayout(RelativeLayout rl, int groeyX, int groeyY, int i, int j, 
             }
         } else {
             if (j == 0) {
-                textView.setText(subjects.get(i - 1).name);
+                textView.setText(textTextField);
             } else if (j == 1) {
-                textView.setText(subjects.get(i - 1).ects);
+                textView.setText(textTextField);
             } else if (j == 2) {
-                textView.setText(subjects.get(i - 1).grade);
-            } else {
-                textView.setText(subjects.get(i - 1).period);
+                textView.setText(textTextField);
+            } else if(j == 3){
+                textView.setText(textTextField);
+            }
+            else
+            {
+                button.setText("Edit");
+                button.setId(i - 1);
+                button.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        chosenId = v.getId();
+                        Intent i = new Intent(getApplicationContext(), DetailsScherm.class);
+                        i.putExtra("chosenId", chosenId);
+                        startActivity(i);
+                    }
+                });
+//                ViewGroup.LayoutParams rlm = button.getLayoutParams();
+//                rlm.height=40;
+//                button.setBackgroundResource(R.color.colorAccent);
+//                button.setHeight(5);
             }
         }
+        if (j == 4 && i >0) {
+            rl.addView(button);
+        } else {
+            rl.addView(textView);
+        }
 
-        rl.addView(textView);
 
+    }
+    public void jsonToDatabase(int lengte)
+    {
+        dbHelper = DatabaseHelper.getHelper(this);
+        values = new ContentValues();
+        int change = 0;
+        for (int i = 0; i < lengte; i++) {
+            Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"},  "name like '" + subjects.get(i).name + "'", null, null, null, null);
+            if(rs.moveToFirst()) {
 
-}
+            }
+            else
+            {
+                change = 1;
+                values.put(Databaseinfo.CourseColumn.NAME, subjects.get(i).name);
+                values.put(Databaseinfo.CourseColumn.ECTS, subjects.get(i).ects);
+                values.put(Databaseinfo.CourseColumn.GRADE, subjects.get(i).grade);
+                values.put(Databaseinfo.CourseColumn.PERIOD, subjects.get(i).period);
+                dbHelper.insert(Databaseinfo.CourseTables.COURSE, null, values);
+            }
+        }
+        if(change == 1) {
+
+            Snackbar.make(this.findViewById(android.R.id.content), "Inserted an entry in the DB", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+    }
+
 }

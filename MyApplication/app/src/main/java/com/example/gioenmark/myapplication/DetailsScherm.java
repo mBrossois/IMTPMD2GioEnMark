@@ -13,10 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class DetailsScherm extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    int chosenId=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,12 @@ public class DetailsScherm extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(2).setChecked(true);
+
+        chosenId = getIntent().getExtras().getInt("chosenId");
+        TextView tView = (TextView)findViewById(R.id.textViewId);
+        String theId = String.valueOf(chosenId);
+        tView.setText(theId);
+
     }
 
     @Override
