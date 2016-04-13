@@ -72,7 +72,6 @@
         android:visibility="invisible"
         android:background="#008383"
         android:textColor="#ffffff"
-        android:layout_below="@+id/button3"
         android:layout_centerHorizontal="true" />
 
     <TextView
