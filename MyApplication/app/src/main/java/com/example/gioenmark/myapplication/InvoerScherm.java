@@ -59,6 +59,7 @@ public class InvoerScherm extends AppCompatActivity
     DatabaseHelper dbHelper;
     ContentValues values;
     int chosenId= 0;
+    int dePeriode = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,7 +170,7 @@ public class InvoerScherm extends AppCompatActivity
     public void grabJsonFirstPeriod(View view) {
         int getLengte = subjects.size();
         String periode = "1";
-
+        dePeriode = 1;
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
 
@@ -193,7 +194,7 @@ public class InvoerScherm extends AppCompatActivity
         int getLengte = subjects.size();
 
         String periode = "2";
-
+        dePeriode = 1;
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
 
@@ -202,7 +203,7 @@ public class InvoerScherm extends AppCompatActivity
     public void grabJsonThirthPeriod(View view) {
         int getLengte = subjects.size();
         String periode = "3";
-
+        dePeriode = 1;
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.content_frame);
         grabPeriod(rl, getLengte, periode);
     }
@@ -210,6 +211,7 @@ public class InvoerScherm extends AppCompatActivity
     public void grabJsonFourthPeriod(View view) {
         int getLengte = subjects.size();
         String periode = "4";
+        dePeriode = 1;
 //        for(int i = 0; i < getLengte; i++)
 //        {
 //
@@ -399,7 +401,7 @@ public class InvoerScherm extends AppCompatActivity
             else
             {
                 button.setText("Edit");
-                button.setId(i - 1);
+                button.setId(positie - 1);
                 button.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v) {
                         // TODO Auto-generated method stub

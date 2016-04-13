@@ -42,7 +42,7 @@ public class DetailsScherm extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(2).setChecked(true);
+        navigationView.getMenu().getItem(1).setChecked(true);
 
         chosenId = getIntent().getExtras().getInt("chosenId");
         TextView tView = (TextView)findViewById(R.id.textViewId);

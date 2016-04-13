@@ -41,7 +41,7 @@ public class OverzichtScherm extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(3).setChecked(true);
+        navigationView.getMenu().getItem(2).setChecked(true);
     }
 
     @Override
