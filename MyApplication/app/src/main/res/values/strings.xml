@@ -9,7 +9,9 @@
     <string name="title_activity_details_scherm">Details scherm</string>
     <string name="title_activity_overzicht_scherm">Overzicht scherm</string>
     <string name="title_activity_persoonsscherm">Persoonsscherm</string>
-    
+    <string name="title_course_list_activity"> Course List </string>
+
+
     <string-array name="jaargang">
         <item> Jaargang</item>
         <item> Jaargang 1</item>

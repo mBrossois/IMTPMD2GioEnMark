@@ -23,6 +23,13 @@
             android:label="@string/title_activity_invoer_scherm"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+
+        android:name="com.example.gioenmark.myapplication.OverzichtScherm"
+        android:label="@string/title_course_list_activity"
+        android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
             android:name=".DetailsScherm"
             android:label="@string/title_activity_details_scherm"
             android:parentActivityName=".MainActivity"
@@ -31,10 +38,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.gioenmark.myapplication.MainActivity" />
         </activity>
-        <activity
-            android:name=".OverzichtScherm"
-            android:label="@string/title_activity_overzicht_scherm"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+
         <activity
             android:name=".Persoonsscherm"
             android:label="@string/title_activity_persoonsscherm"
