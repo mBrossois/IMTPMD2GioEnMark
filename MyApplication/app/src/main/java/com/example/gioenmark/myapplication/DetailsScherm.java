@@ -1,6 +1,8 @@
 package com.example.gioenmark.myapplication;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,11 +15,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.gioenmark.myapplication.database.DatabaseHelper;
+import com.example.gioenmark.myapplication.database.Databaseinfo;
 
 public class DetailsScherm extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    int chosenId=0;
+    Cursor rs;
+    DatabaseHelper dbHelper;
+    ContentValues values;
+    String chosenName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +56,12 @@ public class DetailsScherm extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(1).setChecked(true);
 
-        chosenId = getIntent().getExtras().getInt("chosenId");
-        TextView tView = (TextView)findViewById(R.id.textViewId);
-        String theId = String.valueOf(chosenId);
-        tView.setText(theId);
+        Intent intent = getIntent();
+        chosenName = intent.getStringExtra("chosenName");
+//        TextView tView = (TextView) findViewById(R.id.textViewId);
+//        String theId = String.valueOf(chosenId);
+//        tView.setText(chosenName);
+        grabPeriod();
 
     }
 
@@ -110,5 +124,46 @@ public class DetailsScherm extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void grabPeriod() {
+
+        TextView v0 = (TextView) findViewById(R.id.textView10);
+        TextView v1 = (TextView) findViewById(R.id.textView11);
+        EditText v2 = (EditText) findViewById(R.id.editText2);
+        TextView v3 = (TextView) findViewById(R.id.textView13);
+        CheckBox v4 = (CheckBox) findViewById(R.id.checkBox);
+
+        dbHelper = DatabaseHelper.getHelper(this);
+        values = new ContentValues();
+        rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, "name like '" + chosenName + "'", null, null, null, null);
+//
+        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
+// Maar : de rij kan nog steeds leeg zijn
+// Hoe  : lossen we dit op ??
+
+// Haalt de name uit de resultset
+//        String name = (String) rs.getString(rs.getColumnIndex("name"));
+//        String data;
+
+//
+            String name = rs.getString(rs.getColumnIndex("name"));
+            String ects = rs.getString(rs.getColumnIndex("ects"));
+            String grade = rs.getString(rs.getColumnIndex("grade"));
+            String period = rs.getString(rs.getColumnIndex("period"));
+            String gehaald = rs.getString(rs.getColumnIndex("gehaald"));
+
+            v0.setText(name);
+            v1.setText(ects);
+            v2.setText(grade);
+            v3.setText(period);
+            if(gehaald == "V")
+            {
+                v4.setChecked(v4.isChecked());
+            }
+            else
+            {
+                v4.setChecked(!v4.isChecked());
+            }
     }
 }

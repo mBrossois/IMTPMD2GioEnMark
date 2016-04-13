@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + Databaseinfo.CourseTables.COURSE + " (" +
                 BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Databaseinfo.CourseColumn.NAME + " TEXT," + Databaseinfo.CourseColumn.ECTS + " TEXT," +
-                Databaseinfo.CourseColumn.PERIOD + " TEXT," + Databaseinfo.CourseColumn.GRADE + " TEXT," + Databaseinfo.CourseColumn.GEHAALD + " TEXT,);"
+                Databaseinfo.CourseColumn.PERIOD + " TEXT," + Databaseinfo.CourseColumn.GRADE + " TEXT," + Databaseinfo.CourseColumn.GEHAALD + " TEXT);"
         );
     }
 
