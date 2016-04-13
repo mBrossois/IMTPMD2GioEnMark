@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -157,13 +159,55 @@ public class DetailsScherm extends AppCompatActivity
             v1.setText(ects);
             v2.setText(grade);
             v3.setText(period);
-            if(gehaald == "V")
+
+//            String v = "V";
+            if(gehaald.equals("V"))
             {
-                v4.setChecked(v4.isChecked());
+                v4.setChecked(!v4.isChecked());
+//                Log.i("Hier", gehaald);
             }
             else
             {
-                v4.setChecked(!v4.isChecked());
+                v4.setChecked(v4.isChecked());
             }
+    }
+    public void toOverzicht(View v)
+    {
+        Intent intent = new Intent(this, InvoerScherm.class);
+        startActivity(intent);
+    }
+    public void changeDatabase(View v)
+    {
+        rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, "name like '" + chosenName + "'", null, null, null, null);
+        rs.moveToFirst();   // Skip : de lege elementen vooraan de rij.
+        int pk = rs.getInt(rs.getColumnIndex("_id"));
+        String name = rs.getString(rs.getColumnIndex("name"));
+        String ects = rs.getString(rs.getColumnIndex("ects"));
+        String period = rs.getString(rs.getColumnIndex("period"));
+        EditText v2 = (EditText) findViewById(R.id.editText2);
+        CheckBox v4 = (CheckBox) findViewById(R.id.checkBox);
+        String theGrade = v2.getText().toString();
+        String hoi = String.valueOf(pk);
+        String gehaald;
+        if(v4.isChecked())
+        {
+            gehaald = "V";
+//            Log.i("Hier",gehaald);
+        }
+        else
+        {
+            gehaald = "O";
+//            Log.i("Hier",gehaald);
+        }
+        values.put(BaseColumns._ID, pk);
+        values.put(Databaseinfo.CourseColumn.NAME, name);
+        values.put(Databaseinfo.CourseColumn.ECTS, ects);
+        values.put(Databaseinfo.CourseColumn.GRADE, theGrade);
+        values.put(Databaseinfo.CourseColumn.GEHAALD, gehaald);
+        values.put(Databaseinfo.CourseColumn.PERIOD, period);
+//        dbHelper.insert(Databaseinfo.CourseTables.COURSE, null, values);
+        dbHelper.replace(Databaseinfo.CourseTables.COURSE, null, values);
+        Snackbar.make(this.findViewById(android.R.id.content), "Inserted an entry in the DB", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }

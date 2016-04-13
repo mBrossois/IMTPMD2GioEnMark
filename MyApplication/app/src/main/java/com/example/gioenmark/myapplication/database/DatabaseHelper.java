@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version ){
-        super(context,name,factory, version);
+        super(context, name, factory, version);
     }
 
     public void insert(String table, String nullColumnHack, ContentValues values){
@@ -59,6 +59,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void replace(String table, String nullColumnHack, ContentValues values) {
+        mSQLDB.replace(table, nullColumnHack, values);
+    }
 }
 
 

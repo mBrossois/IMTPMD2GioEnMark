@@ -93,5 +93,27 @@
         android:layout_marginLeft="215dp"
         android:layout_marginTop="35dp"
         android:checked="false" />
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Aanpassen"
+        android:id="@+id/buttonCijfer"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="100dp"
+        android:onClick="changeDatabase"
+        android:background="#008383"
+        android:textColor="#ffffff"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Naar overzicht"
+        android:id="@+id/buttonTerug"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="160dp"
+        android:onClick="toOverzicht"
+        android:background="#008383"
+        android:textColor="#ffffff"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
