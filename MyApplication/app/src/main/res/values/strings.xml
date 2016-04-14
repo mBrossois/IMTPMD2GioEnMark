@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Voortgangs app</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -32,4 +31,5 @@
         <item> Periode 3</item>
         <item> Periode 4</item>
     </string-array>
+    <string name="prefKey">com.example.gioenmark.voortgangapp</string>
 </resources>

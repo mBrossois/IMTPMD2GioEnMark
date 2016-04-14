@@ -12,4 +12,58 @@
     tools:context="com.example.gioenmark.myapplication.OverzichtScherm"
     tools:showIn="@layout/app_bar_overzicht_scherm">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textViewAantalECTS"
+        android:layout_marginTop="115dp"
+        android:layout_marginLeft="70dp"
+        android:textSize="17dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textViewBehaaldPunten"
+        android:layout_marginTop="155dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textViewBehaaldKernvakken"
+        android:layout_marginTop="205dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textViewBehaaldSpecialisatieVakken"
+        android:layout_marginTop="255dp" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:id="@+id/imageView4"
+        android:src="@drawable/stoplichtrood"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="-50dp"/>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:id="@+id/imageView5"
+        android:src="@drawable/stoplichtoranje"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="-50dp" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:id="@+id/imageView6"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="-50dp"
+        android:src="@drawable/stoplichtgroen" />
 </RelativeLayout>
