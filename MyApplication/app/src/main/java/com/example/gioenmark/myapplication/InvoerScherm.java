@@ -75,7 +75,7 @@ public class InvoerScherm extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hardcoded From JSON" + courses[0].grade, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Hardcoded From JSON", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -298,7 +298,7 @@ public class InvoerScherm extends AppCompatActivity
 //        String name = (String) rs.getString(rs.getColumnIndex("name"));
 //        String data;
         SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
-        int studierichting = preferences2.getInt("Studierichting", 0);
+        int studierichting = preferences2.getInt("Periode", 0);
         for (int j = 0; j < 4; j++) {
             if (j > 1) {
                 makeLayout(rl, 125, groeyY, 0, j, positie, "TopText");

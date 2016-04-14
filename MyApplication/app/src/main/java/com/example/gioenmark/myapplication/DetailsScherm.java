@@ -152,7 +152,7 @@ public class DetailsScherm extends AppCompatActivity
 //        String data;
 
             SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
-            int studierichting = preferences2.getInt("Studierichting", 0);
+            int studierichting = preferences2.getInt("Periode", 0);
             String name = rs.getString(rs.getColumnIndex("name"));
             String ects = rs.getString(rs.getColumnIndex("ects"));
             String grade = rs.getString(rs.getColumnIndex("grade"));

@@ -379,11 +379,11 @@ public class OverzichtScherm extends AppCompatActivity
         }
         if(periode == 1)
         {
-            kernvakTekst = "Let op voor " + studieRichting[studierichting -1] + " moet je de volgende vakken wel halen: " + vakken[0] + vakken[1];
+            kernvakTekst = "Let op voor " + studieRichting[studierichting -1] + " moet je de volgende vakken wel halen: " + vakken[0]+ " en " + vakken[1];
         }
         else if(periode > 3 && aantal < 2)
         {
-            kernvakTekst = "Let op voor " + studieRichting[studierichting - 1] + " moet je de volgende vakken wel halen: " + vakken[0] + vakken[1];
+            kernvakTekst = "Let op voor " + studieRichting[studierichting - 1] + " moet je de volgende vakken wel halen: " + vakken[0] +" en " + vakken[1];
             if(welkeKleur == 2)
             {
                 welkeKleur = 1;
