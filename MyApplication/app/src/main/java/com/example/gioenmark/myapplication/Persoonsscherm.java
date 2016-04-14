@@ -224,7 +224,6 @@ public class Persoonsscherm extends AppCompatActivity
         editor.putString("Studierichtingtext",spinner2.getSelectedItem().toString());
         editor.apply();
 
-
         SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
         String name = preferences2.getString("Name", "");
 

@@ -2,8 +2,10 @@ package com.example.gioenmark.myapplication;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,6 +34,7 @@ public class DetailsScherm extends AppCompatActivity
     DatabaseHelper dbHelper;
     ContentValues values;
     String chosenName;
+    String names[] = {"IIPMEDT", "IIPSEN", "IIPBIT", "IIPFIT"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,13 +151,17 @@ public class DetailsScherm extends AppCompatActivity
 //        String name = (String) rs.getString(rs.getColumnIndex("name"));
 //        String data;
 
-//
+            SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
+            int studierichting = preferences2.getInt("Studierichting", 0);
             String name = rs.getString(rs.getColumnIndex("name"));
             String ects = rs.getString(rs.getColumnIndex("ects"));
             String grade = rs.getString(rs.getColumnIndex("grade"));
             String period = rs.getString(rs.getColumnIndex("period"));
             String gehaald = rs.getString(rs.getColumnIndex("gehaald"));
-
+            if(name.equals("IIPXXXX"))
+            {
+                name = names[studierichting - 1];
+            }
             v0.setText(name);
             v1.setText(ects);
             v2.setText(grade);
@@ -207,7 +214,7 @@ public class DetailsScherm extends AppCompatActivity
         values.put(Databaseinfo.CourseColumn.PERIOD, period);
 //        dbHelper.insert(Databaseinfo.CourseTables.COURSE, null, values);
         dbHelper.replace(Databaseinfo.CourseTables.COURSE, null, values);
-        Snackbar.make(this.findViewById(android.R.id.content), "Inserted an entry in the DB", Snackbar.LENGTH_LONG)
+        Snackbar.make(this.findViewById(android.R.id.content), "De database is aangepast.", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 }
