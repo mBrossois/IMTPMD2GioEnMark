@@ -4,9 +4,11 @@ import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -60,6 +62,7 @@ public class InvoerScherm extends AppCompatActivity
     ContentValues values;
 //    int chosenId= 0;
     Cursor rs;
+    String names[] = {"IIPMEDT", "IIPSEN", "IIPBIT", "IIPFIT"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,7 @@ public class InvoerScherm extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hardcoded From JSON" + courses[0].grade, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Hardcoded From JSON", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -294,7 +297,8 @@ public class InvoerScherm extends AppCompatActivity
 // Haalt de name uit de resultset
 //        String name = (String) rs.getString(rs.getColumnIndex("name"));
 //        String data;
-
+        SharedPreferences preferences2 = PreferenceManager.getDefaultSharedPreferences(this);
+        int studierichting = preferences2.getInt("Periode", 0);
         for (int j = 0; j < 4; j++) {
             if (j > 1) {
                 makeLayout(rl, 125, groeyY, 0, j, positie, "TopText");
@@ -311,6 +315,10 @@ public class InvoerScherm extends AppCompatActivity
             String period = rs.getString(rs.getColumnIndex("period"));
 
             positie++;
+            if(name.equals("IIPXXXX"))
+            {
+                name = names[studierichting -1];
+            }
             makeLayout(rl, groeyX, groeyY, 1, 0, positie,name);
             makeLayout(rl, groeyX, groeyY, 1, 1, positie, ects);
             makeLayout(rl, 135, groeyY, 1, 2, positie, grade);
@@ -454,7 +462,7 @@ public class InvoerScherm extends AppCompatActivity
         }
         if(change == 1) {
 
-            Snackbar.make(this.findViewById(android.R.id.content), "Inserted an entry in the DB", Snackbar.LENGTH_LONG)
+            Snackbar.make(this.findViewById(android.R.id.content), "De database is aangepast.", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
     }
