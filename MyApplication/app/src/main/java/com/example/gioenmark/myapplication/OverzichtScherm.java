@@ -84,8 +84,24 @@ public class OverzichtScherm extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(2).setChecked(true);
-        bepaalVoortgang();
-        vulTekstVelden();
+        int deCheck = checkDatabase();
+        if(deCheck ==1) {
+            bepaalVoortgang();
+            vulTekstVelden();
+        }
+        else
+        {
+            TextView t0 = (TextView) findViewById(R.id.textViewAantalECTS);
+            TextView t1 = (TextView) findViewById(R.id.textViewBehaaldPunten);
+            TextView t2 = (TextView) findViewById(R.id.textViewBehaaldKernvakken);
+            TextView t3 = (TextView) findViewById(R.id.textViewBehaaldSpecialisatieVakken);
+
+            t0.setText("Ga naar het invoerscherm en het persoonsscherm en vul dit in voor de voortgang!");
+            t1.setText("");
+            t2.setText("");
+            t3.setText("");
+
+        }
     }
 
     @Override
@@ -443,6 +459,17 @@ public class OverzichtScherm extends AppCompatActivity
     public String getOver()
     {
         return over;
+    }
+    public int checkDatabase() {
+        subjects = new ArrayList<Course>();
+        dbHelper = DatabaseHelper.getHelper(this);
+        values = new ContentValues();
+        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, "gehaald like 'V'", null, null, null, null);
+        if (rs.moveToFirst()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
 }

@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Course> subjects;
     DatabaseHelper dbHelper;
     ContentValues values;
+    String ectTekst = "";
+    String overgaanTekst = "";
+    String voortgangTekst = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +52,14 @@ public class MainActivity extends AppCompatActivity
         int richting = preferences2.getInt("Periode", 0);
 
         int period = preferences2.getInt("Studierichting", 0);
-        calcEcts();
-        overzicht.bepaalVoortgang(name, jaar, richting, period, subjects);
-        String ectTekst = overzicht.getEct();
-        String overgaanTekst = overzicht.getOver();
-        String voortgangTekst = overzicht.getVoort();
+        int deCheck = checkDatabase();
+        if(deCheck == 1) {
+            calcEcts();
+            overzicht.bepaalVoortgang(name, jaar, richting, period, subjects);
+            ectTekst = overzicht.getEct();
+            overgaanTekst = overzicht.getOver();
+            voortgangTekst = overzicht.getVoort();
+        }
 
 
         TextView textViewToChange = (TextView) findViewById(R.id.textView2);
@@ -182,5 +188,16 @@ public class MainActivity extends AppCompatActivity
             subjects.add(course);
         }
         while(rs.moveToNext());
+    }
+    public int checkDatabase() {
+        subjects = new ArrayList<Course>();
+        dbHelper = DatabaseHelper.getHelper(this);
+        values = new ContentValues();
+        Cursor rs = dbHelper.query(Databaseinfo.CourseTables.COURSE, new String[]{"*"}, "gehaald like 'V'", null, null, null, null);
+        if (rs.moveToFirst()) {
+            return 1;
+        } else {
+           return 0;
+        }
     }
 }
